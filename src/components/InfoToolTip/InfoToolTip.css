@@ -1,0 +1,104 @@
+.popup {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
+  transform: perspective(600px) translateY(-50%) rotateX(60deg);
+  transition: all 0.8s ease;
+}
+
+.popup_opened {
+  visibility: visible;
+  opacity: 1;
+  transform: perspective(600px) translateY(0) rotateX(0deg);
+}
+
+.popup__container-infoTooltip {
+  padding: 60px 36px;
+  width: 430px;
+  min-height: 330px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.popup__close {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  top: -40px;
+  right: -40px;
+  background: url('../../images/closebutton.svg') 0 0/cover no-repeat;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.popup__infoimage {
+  margin: 0;
+  padding: 0;
+  width: 120px;
+  height: 120px;
+  align-self: center;
+}
+
+.popup__title {
+  padding: 0;
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: 900;
+  color: #000;
+  margin: 0 0 54px 0;
+}
+
+.popup__title_infoTooltip {
+  font-family: 'Inter', Arial, sans-serif;
+  margin: 32px 0 0 0;
+  max-width: 358px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+}
+
+@media (max-width: 630px) {
+  .popup {
+    width: 100%;
+  }
+  
+  .popup__container-infoTooltip {
+    width: 100%;
+    padding: 50px 18px;
+  }
+  
+  .popup__close {
+    width: 20px;
+    height: 20px;
+    top: -36px;
+    right: 0;
+  }
+  
+  .popup__title {
+    font-size: 18px;
+    line-height: 22px;
+    margin-bottom: 75px;
+  }
+  
+  .popup__title_infoTooltip {
+    font-size: 20px;
+    line-height: 24px;
+  }
+}

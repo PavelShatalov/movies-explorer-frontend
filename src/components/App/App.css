@@ -1,0 +1,30 @@
+/* Общие стили для всего документа */
+body {
+  font-family: "Inter", Arial, sans-serif;
+  background-color: #202020;
+  color: #fff;
+}
+
+/* Контейнер, в котором располагается весь контент */
+#root {
+  min-width: 320px;
+  max-width: 1280px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Общие стили для элементов, которые действуют как ссылки или кнопки */
+.links {
+  cursor: pointer;
+  transition: all .5s ease;
+}
+
+/* Изменение прозрачности при наведении курсора на ссылки или кнопки */
+.links:hover {
+  opacity: .7;
+}
+
+/* Стили для элементов с классом "not-found", например, для страницы "404 Not Found" */
+.not-found {
+  text-align: center;
+}

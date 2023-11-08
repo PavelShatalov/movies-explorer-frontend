@@ -1,0 +1,160 @@
+.container {
+	padding: 110px 70px;
+}
+
+.title {
+	margin: 0;
+	padding: 0;
+	font-size: 22px;
+	line-height: 27px;
+	font-weight: 400;
+	letter-spacing: -4%;
+	font-style: normal;
+	padding-bottom: 23px;
+	border-bottom: 1px solid #DADADA;
+}
+
+.about-project__container {
+	margin: 70px 0 110px;
+	display: flex;
+	gap: 40px;
+}
+
+.about-project__column {
+	max-width: 550px;
+}
+
+.about-project__subtitle {
+	margin: 0;
+	padding: 0;
+	font-size: 20px;
+	line-height: 24px;
+	font-weight: 400;
+	letter-spacing: -4%;
+	font-style: normal;
+	margin-bottom: 26px;
+}
+
+.about__project__text {
+	margin: 0;
+	padding: 0;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.about-project__graphic {
+	display: flex;
+}
+
+.about-project__graphic-backend {
+	flex-basis: 25%;
+}
+
+.about-project__graphic-frontend {
+	width: 100%;
+}
+
+.about-project__graphic-subtitle {
+	margin: 0;
+	padding: 0;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+	min-height: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.about-project__graphic-subtitle_backend {
+	background-color: #3DDC84;
+	color: #000;
+}
+
+.about-project__graphic-subtitle_frontend {
+	background-color: #303030;
+}
+
+.about-project__graphic-text {
+	margin: 0;
+	padding: 0;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+	color: #8B8B8B;
+	margin-top: 14px;
+}
+
+@media (max-width: 768px){
+	.container {
+		padding: 90px 50px;
+	}
+
+	.about-project__container {
+		margin: 70px 0 93px;
+		gap: 30px;
+	}
+
+	.about-project__column {
+		max-width: 319px;
+	}
+
+	.about-project__subtitle {
+		margin-bottom: 22px;
+	}
+
+	.about-project__graphic-backend {
+		flex-basis: 26.515%;
+	}
+}
+
+@media (max-width: 500px){
+	.container {
+		padding: 70px 18px;
+	}
+
+	.title {
+		line-height: 18px;
+		padding-bottom: 22px;
+	}
+
+	.about-project__column:nth-child(1) {
+		margin-bottom: 56px;
+	}
+
+	.about-project__column {
+		max-width: none;
+	}
+
+	.about-project__container {
+		margin: 60px 0 60px;
+		display: block;
+	}
+
+	.about-project__subtitle {
+		margin-bottom: 16px;
+		font-size: 18px;
+		line-height: 22px;
+	}
+
+	.about-project__graphic-backend {
+		flex-basis: 54.35%;
+	}
+
+	.about__project__text {
+		font-size: 11px;
+		line-height: 16px;
+	}
+
+	.about-project__graphic-text {
+		font-size: 11px;
+		line-height: 13px;
+		margin-top: 10px;
+	}
+}

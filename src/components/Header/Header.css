@@ -1,0 +1,40 @@
+/* Заголовок навигационной панели */
+.custom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 74px;
+  padding: 0 70px;
+}
+
+/* Фон заголовка в темной теме */
+.custom-header-theme_blue {
+  background-color: #073042;
+}
+
+/* Фон заголовка в светлой теме */
+.custom-header-theme_grey {
+  background-color: #202020;
+}
+
+/* Стили для кнопки "Зарегистрироваться" */
+.header__signup {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  margin-right: 30px;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Стили для кнопки "Войти" */
+.header__signin {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #000;
+  padding: 8px 20px;
+  background-color: #3DDC84;
+  border-radius: 3px;
+  text-decoration: none;
+}
