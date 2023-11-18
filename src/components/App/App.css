@@ -1,30 +1,23 @@
-/* Общие стили для всего документа */
 body {
-  font-family: "Inter", Arial, sans-serif;
-  background-color: #202020;
+  background: #202020;
+  font-family: 'Inter', Helvetica, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  box-sizing: border-box;
   color: #fff;
 }
-
-/* Контейнер, в котором располагается весь контент */
-#root {
+.App {
   min-width: 320px;
   max-width: 1280px;
   margin: 0 auto;
   box-sizing: border-box;
 }
-
-/* Общие стили для элементов, которые действуют как ссылки или кнопки */
-.links {
+.link {
   cursor: pointer;
-  transition: all .5s ease;
+  transition: all .3s linear;
+  text-decoration: none;
 }
 
-/* Изменение прозрачности при наведении курсора на ссылки или кнопки */
-.links:hover {
-  opacity: .7;
-}
-
-/* Стили для элементов с классом "not-found", например, для страницы "404 Not Found" */
-.not-found {
-  text-align: center;
+.link:hover {
+  opacity: .5;
 }

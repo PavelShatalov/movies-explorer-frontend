@@ -1,0 +1,55 @@
+
+.promo {
+  background-image: url('../../images/promo.svg'); /* Задаем изображение фона */
+  background-color: #073042;                       /* Задаем цвет фона (темно-зеленый) */
+  background-repeat: no-repeat;                    /* Отключаем повторение фона */
+  background-position: center 82px;               /* Центрируем изображение по горизонтали и вертикали */
+  background-size: 320px; 
+  width: 100%; 
+}
+.promo__container {
+  padding: 0 30px;
+}
+.promo__title {
+	color: #FFF;
+  text-align: center;
+	font-size: 50px;
+	font-weight: 400;
+	line-height: 58px;
+  font-style: normal;
+  font-family: Inter;
+	letter-spacing: -2px;
+	margin: 0 auto;
+	max-width: 730px;
+	padding: 184px 0 224px;  
+}
+
+@media (max-width: 768px) {
+	.promo {
+    background-position: center 224px;               /* Центрируем изображение по горизонтали и вертикали */
+	}
+  .promo__container {
+    padding: 0 19px;
+  }
+
+	.promo__title {
+		padding: 326px 0 342px;
+	}
+}
+
+@media (max-width: 480px) {
+	.promo {
+    background-position: center 142px;               /* Центрируем изображение по горизонтали и вертикали */
+    background-size:248px;   
+	}
+  .promo__container {
+    padding: 0 10px;
+  }
+	.promo__title {
+		max-width: 300px;
+		padding: 207px 0 246px;
+    font-size: 31px;
+    line-height: 39px; 
+    letter-spacing: -1.24px;
+	}
+}

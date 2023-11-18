@@ -1,0 +1,39 @@
+
+.navtab {
+  background: #272727;
+  width: 100%;
+  padding: 24px 0;
+}    
+    
+.navtab__links {
+  list-style-type: none;
+  margin: 0 auto;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}
+.navtab__link {
+  color: #FFF;
+
+  font-family: Inter;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px; /* 123.077% */
+  text-decoration-line: underline;
+}
+
+@media (max-width: 768px) {
+	.navtab {
+    padding: 25px 0;
+  }    
+}
+
+@media (max-width: 480px) {
+  .navtab__links {
+    gap: 24px;
+  }
+  .navtab__link {
+    font-size: 11px;
+  }
+}

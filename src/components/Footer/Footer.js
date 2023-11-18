@@ -1,45 +1,43 @@
 import "./Footer.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation, Link } from "react-router-dom";
 
-const Footer = () => {
-  const FooterPath = () => (
-    <footer className="footer">
-      <h2 className="footer__title">
-        Учебный проект Яндекс.Практикум х BeatFilm.
-      </h2>
-      <div className="footer__container">
-        <p className="footer__copyright">
-          &copy;&nbsp;2023
-        </p>
-        <nav className="footer__links">
-          <a
-            className="footer__link links"
-            href="https://practicum.yandex.ru"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Яндекс.Практикум
-          </a>
-          <a
-            className="footer__link links"
-            href="https://github.com/PavelShatalov"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Github
-          </a>
-        </nav>
-      </div>
-    </footer>
-  );
+function Footer() {
+  function Footers() {
+    return (
+      <footer className="footer">
+        <div className="footer__container">
+          <h2 className="footer__title">
+            Учебный проект Яндекс.Практикум х BeatFilm.
+          </h2>
+          <div className="footer__info">
+            <p className="footer__copyright">&copy;&nbsp;2023</p>
+            <nav className="footer__nav">
+              <a
+                className="footer__link link"
+                href="https://practicum.yandex.ru"
+                target="_blank"
+                rel="noreferrer"
+              >Яндекс.Практикум</a>
+              <a
+                className="footer__link link"
+                href="https://github.com/PavelShatalov"
+                target="_blank"
+                rel="noreferrer"
+              >Github</a>
+            </nav>
+          </div>
+        </div>
+      </footer>
+    )
+  }
 
   return (
     <Routes>
-      <Route path="/" element={<FooterPath />} />
-      <Route path="/movies" element={<FooterPath />} />
-      <Route path="/saved-movies" element={<FooterPath />} />
+      <Route path="/" element={<Footers />} />
+      <Route path="/movies" element={<Footers />} />
+      <Route path="/saved-movies" element={<Footers />} />
     </Routes>
   );
-};
 
+}
 export default Footer;
