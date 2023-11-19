@@ -51,6 +51,7 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  outline:hsl;
 }
 
 .register__input_active {
