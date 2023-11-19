@@ -24,21 +24,21 @@ function Profile({ handleUserUpdate, handleSignOut, apiname, apiemail  }) {
     <main className="profile">
       <section className="profile__container">
         <form className="profile__form" onSubmit ={handleLoginSubmit}>
-          <h2 className="profile__title">Привет, {apiname}</h2>
+          <h1 className="profile__title">Привет, {apiname}</h1>
           <fieldset className="profile__inputs">
             <label className="profile__label profile__label_line">
               <p className="profile__description">Имя</p>
               <input type="text" name="url" className={`profile__input`}
-              minLength="2" maxLength="30" required onChange={handlNameChange} value={'' || name} />
+              minLength="2" maxLength="30" required onChange={handlNameChange} value={'' || name} placeholder="Имя" />
             </label>
             <label className="profile__label">
               <p className="profile__description">E-mail</p>
               <input type="email" name="card-name" className={`profile__input`}
-                minLength="2" maxLength="30" required onChange={handleEmailChange} value={'' || email} />
+                minLength="2" maxLength="30" required onChange={handleEmailChange} value={'' || email}   placeholder="E-mail"/>
             </label>
             <button type="submit" className="profile__submit-send link">Редактировать</button>
             <p className="profile__message">
-              <Link to ="/sign-in" className="profile__sign-out link" onClick={handleSignOut}>Выйти из аккаунта</Link>
+              <Link to ="/signin" className="profile__sign-out link" onClick={handleSignOut}>Выйти из аккаунта</Link>
             </p>
           </fieldset>
         </form>

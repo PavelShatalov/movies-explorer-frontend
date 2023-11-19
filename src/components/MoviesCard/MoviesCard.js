@@ -31,7 +31,7 @@ function MoviesCard({ card }) {
     <li className="card">
       <div className="card__container">
         <a className="card__link" href={card.trailerLink} target="_blank" rel="noreferrer noopener" >
-          <img className="card__img" alt="заставка фильма" src={
+          <img className="card__img" alt={card.nameRU || card.nameEN} src={
             card.image.url
               ? `${'https://api.nomoreparties.co'}${card.image.url}`
               : card.image
@@ -39,7 +39,7 @@ function MoviesCard({ card }) {
           <div className="card__info">
             <h2 className="card__title">{card.nameRU || card.nameEN}</h2>
             {pathname === "/movies" ? (
-              <button className={`card__button card__button_like ${isLiked && "card__button_like_active"} `} type="button" onClick={ (e) => handleLikeMovie(e) } />) :
+              <button  className={`card__button card__button_like ${isLiked && "card__button_like_active"} `} type="button" onClick={ (e) => handleLikeMovie(e) } />) :
               (<button className="card__button card__button_delete" type="button" onClick= {(e) => handleDeleteMovie(e)} />)}
           </div>
           <p className="card__duration">{getTime(card.duration)}</p>

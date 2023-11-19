@@ -4,13 +4,16 @@ import { useNavigate } from "react-router-dom";
 function NotFound() {
   const navigate = useNavigate();
   return (
-    <section className="notfound__container">
-      <h2 className="notfound__title">404</h2>
+    <main>
+      <section className="notfound__container">
+      <h1 className="notfound__title">404</h1>
       <p className="notfound__subtitle">Страница не найдена</p>
       <p className="notfound__back link" onClick={() => { navigate(-1); }}>
         Назад
       </p>
-    </section>
+      </section>
+    </main>
+    
   );
 };
 

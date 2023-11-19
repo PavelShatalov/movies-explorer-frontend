@@ -11,11 +11,12 @@ function Header({ loggedIn }) {
   const { pathname } = useLocation();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const popup = useRef(null);
+  loggedIn = false;
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
+    
     // Добавляем слушатель события изменения размера окна
     window.addEventListener('resize', handleResize);
 
@@ -36,7 +37,8 @@ function Header({ loggedIn }) {
     if (loggedIn && windowWidth > 768) {
       return (
         <header className={`header__container ${pathname === "/" && "header__container_blue"}`}>
-          <div className="header__nav-container header__nav-container_logined">
+          
+          <nav className="header__nav-container header__nav-container_logined">
             <Link className="header__logoContainer" to="/">
               <img className="header__logo header__logo_logined link" src={logo} alt="Логотип" />
             </Link>
@@ -46,10 +48,10 @@ function Header({ loggedIn }) {
             <Link to="/saved-movies" className="header__movie link">
               Сохранённые фильмы
             </Link>
-          </div>
+          </nav>
           <Link to="/profile" className="header__profile header__profile_container link">
             <p>Аккаунт</p>
-            <button className={`header__icon ${pathname === "/" ? "header__icon_blue" : "header__icon_grey"}`}></button>
+            <button type="button" className={`header__icon ${pathname === "/" ? "header__icon_blue" : "header__icon_grey"}`}></button>
           </Link>
         </header>
       );
@@ -78,7 +80,7 @@ function Header({ loggedIn }) {
               </div>
               <Link to="/profile" className={`header__popup-nav-profile link `}>
                 <p className={`header__popup-nav-profile-text ${pathname === "/profile" && "underline"}`} >Аккаунт</p>
-              <button className={`header__icon header__icon_grey`}></button>
+              <button type="button" className={`header__icon header__icon_grey`}></button>
             </Link>
             </div>
           </nav>
@@ -94,10 +96,10 @@ function Header({ loggedIn }) {
             <img className="header__logo link" src={logo} alt="Логотип" />
           </Link>
           <div className="header__nav-container">
-            <Link to="/sign-up" className="header__registration link">
+            <Link to="/signup" className="header__registration link">
               Регистрация
             </Link>
-            <Link to="/sign-in" className="header__login link">
+            <Link to="/signin" className="header__login link">
               Войти
             </Link>
           </div>

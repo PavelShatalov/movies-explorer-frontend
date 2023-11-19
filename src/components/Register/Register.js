@@ -73,30 +73,30 @@ function Register({ onSubmit }) {
         </Link>
 
         <form className="register__form" onSubmit={handleRegisterSubmit}>
-          <h2 className="register__title">Добро пожаловать!</h2>
+          <h1 className="register__title">Добро пожаловать!</h1>
           <fieldset className="register__inputs">
             <label className="register__label">
               <p className="register__description">Имя</p>
               <input type="text" name="url" className={`register__input ${errors.name && "register__input_active"}`}
-                minLength="2" maxLength="30" required onChange={handleNameChange} value={'' || name} ref={nameInput} />
+                minLength="2" maxLength="30" required onChange={handleNameChange} value={'' || name} ref={nameInput} placeholder="Имя" />
               <p className={`register__input-error ${errors.name && "register__input-error_active"}`} >{errors.name}</p>
             </label>
             <label className="register__label">
               <p className="register__description">E-mail</p>
               <input type="email" name="card-name" className={`register__input ${errors.email && "register__input_active"}`}
-                minLength="2" maxLength="30" required onChange={handleEmailChange} value={'' || email} ref={emailInput} />
+                minLength="2" maxLength="30" required onChange={handleEmailChange} value={'' || email} ref={emailInput} placeholder="E-mail" />
               <p className={`register__input-error ${errors.email && "register__input-error_active"}`}>{errors.email}</p>
             </label>
             <label className="register__label">
               <p className="register__description">Пароль</p>
               <input type="password" name="url" className={`register__input ${errors.password && "register__input_active"}`}
-                minLength="2" maxLength="30" required onChange={handlePasswordChange} value={'' || password} ref={passwordInput} />
+                minLength="2" maxLength="30" required onChange={handlePasswordChange} value={'' || password} ref={passwordInput} placeholder="password" />
               <p className={`register__input-error ${errors.password && "register__input-error_active"}`} >{errors.password}</p>
             </label>
-            <button type="submit" className="register__submit-send" disabled={!isValidForm}>Зарегистрироваться</button>
+            <button type="submit" className="register__submit-send link" disabled={!isValidForm}>Зарегистрироваться</button>
             <p className="register__message">
               <span className="register__ask">Уже зарегистрированы?</span>
-              <Link to="/sign-in" className="register__link link">Войти</Link>
+              <Link to="/signin" className="register__link link">Войти</Link>
               {/* <span className="register__link link">Войти</span> */}
             </p>
           </fieldset>

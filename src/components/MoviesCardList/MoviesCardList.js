@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import MoviesCard from '../MoviesCard/MoviesCard.js';
 import './MoviesCardList.css';
-import MoviesCard from '../MoviesCardList/MoviesCard.js';
 
 function MoviesCardList({ cards }) {
   const [visibleCards, setVisibleCards] = useState(12); // Начальное количество отображаемых карточек

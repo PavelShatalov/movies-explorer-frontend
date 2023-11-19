@@ -62,8 +62,8 @@ function App() {
           <Header loggedIn={loggedIn} />
           <Routes>
             <Route path="/" exact element={<Main />} />
-            <Route path="/sign-in" exact element={<Login onSubmit={(data) => handleSignIn(data)} />} />
-            <Route path="/sign-up" exact element={<Register onSubmit={(data) => handleSignUp(data)} />} />
+            <Route path="/signin" exact element={<Login onSubmit={(data) => handleSignIn(data)} />} />
+            <Route path="/signup" exact element={<Register onSubmit={(data) => handleSignUp(data)} />} />
             <Route path="/profile" exact element={<Profile handleUserUpdate={(data) => handleUserUpdate(data)} handleSignOut={handleSignOut} apiname="pavel" apiemail="mail@mail" />} />
             <Route path="/movies" exact element={<Movies movies={movieList} />} />
             <Route path="/saved-movies" exact element={<SavedMovies movies={movieList} />} />

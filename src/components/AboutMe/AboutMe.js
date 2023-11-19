@@ -25,7 +25,7 @@ function AboutMe() {
             rel = "noreferrer"
             >Github</a>
         </div>
-        <img src={aboutMe} className="aboutme__image" alt="Моё фото" />
+        <img src={aboutMe} className="aboutme__image" alt="Фото разработчка сайта" />
       </div>
     </section>
     )};

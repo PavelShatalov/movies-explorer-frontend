@@ -15,7 +15,7 @@ function SearchForm({isSaved}) {
         </div>
         <div className="searchform__container_checkbox">
           <label className="searchform__switch">
-            <input className="searchform__checkbox" type="checkbox"  defaultChecked = {isSaved} onClick={handleCheckbox}></input>
+            <input className="searchform__checkbox" type="checkbox"  defaultChecked = {isSaved} onClick={handleCheckbox} placeholder="короткометражки"></input>
             <p className="searchform__text">Короткометражки</p>
           </label>
         </div>
