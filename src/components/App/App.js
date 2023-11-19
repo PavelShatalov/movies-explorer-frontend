@@ -11,12 +11,22 @@ import NotFound from '../NotFound/NotFound.js';
 import Movies from '../Movies/Movies.js';
 import SavedMovies from '../SavedMovies/SavedMovies.js';
 import { getMovies } from "../utils/MovieApi.js";
+import * as mainApi from "../utils/MainApi";
 import Preloder from '../Preloader/Preloader.js';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(true);
   const [movieList, setMovieList] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  mainApi
+  .getSavedMovies()
+  .then((data) => {
+    console.log(data);
+  }).catch((err) => {
+    console.log(err);
+  }
+  );
 
   useEffect(() => {
     async function fetchMovies() {
