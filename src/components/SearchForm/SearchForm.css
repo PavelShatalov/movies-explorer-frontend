@@ -1,0 +1,123 @@
+
+.searchform {
+  padding: 60px 5.46875% 0 5.46875%;
+  margin-bottom: 10px;
+}
+
+.searchform__form {
+  border-bottom: 1px solid #424242;
+}
+.searchform__container_checkbox {
+  margin-bottom: 70px;
+}
+
+.searchform__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 46px;
+  background-color: #2F2F2F;
+  border-radius: 40px;
+  padding: 0 6px 0 22px;
+  margin: 0 auto 42px auto;
+  box-sizing: border-box;
+}
+.searchform__input {
+  background-color: #2F2F2F;
+  border: none;
+  color: #8B8B8B;
+
+  font-feature-settings: 'clig' off, 'liga' off;
+  font-family: 'Inter', Helvetica, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 17px; /* 130.769% */
+  width: 90%;
+  outline:hsl;
+}
+.searchform__button {
+  background-image: url(../../images/find.svg);
+  width: 34px;
+  height: 34px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+
+.searchform__switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px ;
+}
+.searchform__checkbox {
+  /* position: absolute; */
+  /* opacity: 0; */
+  cursor: pointer;
+  appearance: none;
+  width: 36px; /* Регулируйте ширину флажка по своему усмотрению */
+  height: 20px; /* Регулируйте высоту флажка по своему усмотрению */
+
+  background-image: url(../../images/checkDisable.svg);
+  background-size: cover;
+  border: none;
+  outline: none;
+}
+.searchform__checkbox:checked {
+  background-image: url('../../images/check.svg');
+  background-size: cover;
+}
+.searchform__text {
+  color: #FFF;
+
+  font-family: 'Inter', Helvetica, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 128.571% */
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .searchform {
+    padding: 80px 3.9% 0 3.9%;
+  }
+  
+  .searchform__container_checkbox {
+    margin-bottom: 51px;
+  }
+}
+@media (max-width: 480px) {
+  .searchform {
+    padding: 80px 4.375% 0 4.375%;
+    margin-bottom: 10px;
+  }
+  
+  .searchform__container_checkbox {
+    margin-bottom: 50px;
+  }
+  
+  .searchform__container {
+
+    padding: 0 6px 0 19px;
+    margin: 0 auto 43px auto;
+    box-sizing: border-box;
+  }
+  .searchform__input {
+    font-size: 11px;
+    width: 70%;
+  }
+  
+  .searchform__switch {
+    gap: 13px ;
+  }
+
+  .searchform__text {
+    font-size: 11px;
+    line-height: 18px; 
+  }
+}
