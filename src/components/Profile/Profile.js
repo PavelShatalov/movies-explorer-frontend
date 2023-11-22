@@ -1,12 +1,63 @@
 import "./Profile.css";
 import { Link } from "react-router-dom";
+import Preloder from '../Preloader/Preloader.js';
+import React, { useState, useEffect, useRef } from "react";
 
-import React, { useState } from "react";
-
-function Profile({ handleUserUpdate, handleSignOut, apiname, apiemail  }) {
+function Profile({ handleUserUpdate, handleSignOut, apiname, apiemail }) {
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+  const [loading, setLoading] = useState(true);
   const [name, setName] = useState(apiname);
   const [email, setEmail] = useState(apiemail);
- 
+  const [isValidForm, setIsValidForm] = useState(false);
+
+  const emailInput = useRef(null);
+  const nameInput = useRef(null);
+
+  function validateEmail(email) {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
+  useEffect(() => {
+    setLoading(true);
+    validateEmailForm();
+    setLoading(false);
+  }, [email, emailInput,]); 
+
+  useEffect(() => {
+    setLoading(true);
+    validateNameForm();
+    setLoading(false);
+  }, [name,nameInput]);
+
+  function validateEmailForm() {
+    let isValid = true;
+    if (emailInput.current && !emailInput.current.validity.valid) {
+      isValid = false;
+    }
+    if(!validateEmail(email)){
+      isValid = false;
+    }
+    if (email === apiemail) {
+     
+      isValid = false;
+    }
+    setIsValidForm(isValid);
+  }
+
+  function validateNameForm() {
+    let isValid = true;
+    if (nameInput.current && !nameInput.current.validity.valid) {
+      isValid = false;
+    }
+    if (name === apiname) {
+      isValid = false;
+    }
+    setIsValidForm(isValid);
+  }
+
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     handleUserUpdate({ name, email });
@@ -22,28 +73,33 @@ function Profile({ handleUserUpdate, handleSignOut, apiname, apiemail  }) {
 
   return (
     <main className="profile">
-      <section className="profile__container">
-        <form className="profile__form" onSubmit ={handleLoginSubmit}>
-          <h1 className="profile__title">Привет, {apiname}</h1>
-          <fieldset className="profile__inputs">
-            <label className="profile__label profile__label_line">
-              <p className="profile__description">Имя</p>
-              <input type="text" name="url" className={`profile__input`}
-              minLength="2" maxLength="30" required onChange={handlNameChange} value={'' || name} placeholder="Имя" />
-            </label>
-            <label className="profile__label">
-              <p className="profile__description">E-mail</p>
-              <input type="email" name="card-name" className={`profile__input`}
-                minLength="2" maxLength="30" required onChange={handleEmailChange} value={'' || email}   placeholder="E-mail"/>
-            </label>
-            <button type="submit" className="profile__submit-send link">Редактировать</button>
-            <p className="profile__message">
-              <Link to ="/signin" className="profile__sign-out link" onClick={handleSignOut}>Выйти из аккаунта</Link>
-            </p>
-          </fieldset>
-        </form>
-        
-      </section>
+      {loading ? (
+        <Preloder />
+      ) : (
+        <>
+          <section className="profile__container">
+            <form className="profile__form" onSubmit={handleLoginSubmit}>
+              <h1 className="profile__title">Привет, {apiname}</h1>
+              <fieldset className="profile__inputs">
+                <label className="profile__label profile__label_line">
+                  <p className="profile__description">Имя</p>
+                  <input type="text" name="url" className={`profile__input`} ref={nameInput}
+                    minLength="2" maxLength="30" required onChange={handlNameChange} value={'' || name} placeholder="Имя" />
+                </label>
+                <label className="profile__label">
+                  <p className="profile__description">E-mail</p>
+                  <input type="email" name="card-name" className={`profile__input`} ref={emailInput}
+                    minLength="2" maxLength="30" required onChange={handleEmailChange} value={'' || email} placeholder="E-mail" />
+                </label>
+                <button type="submit" className="profile__submit-send link" disabled = {!isValidForm}>Редактировать</button>
+                <p className="profile__message">
+                  <Link to="/signin" className="profile__sign-out link" onClick={handleSignOut}>Выйти из аккаунта</Link>
+                </p>
+              </fieldset>
+            </form>
+          </section>
+        </>
+      )}
     </main>
   )
 }

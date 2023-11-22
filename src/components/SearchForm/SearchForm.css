@@ -20,7 +20,7 @@
   background-color: #2F2F2F;
   border-radius: 40px;
   padding: 0 6px 0 22px;
-  margin: 0 auto 42px auto;
+  margin: 0 auto 10px auto;
   box-sizing: border-box;
 }
 .searchform__input {
@@ -82,6 +82,26 @@
   margin: 0;
 }
 
+.searchform__error {
+  color: #EE3465;
+
+  font-family: 'Inter', Helvetica, sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  visibility: hidden;
+  min-height: 12px;
+  margin-bottom: 20px;
+}
+.searchform__error_active {
+  visibility: visible;
+}
+
+
 @media (max-width: 768px) {
   .searchform {
     padding: 80px 3.9% 0 3.9%;
@@ -90,6 +110,8 @@
   .searchform__container_checkbox {
     margin-bottom: 51px;
   }
+
+
 }
 @media (max-width: 480px) {
   .searchform {
@@ -104,9 +126,15 @@
   .searchform__container {
 
     padding: 0 6px 0 19px;
-    margin: 0 auto 43px auto;
+    margin: 0 auto 10px auto;
     box-sizing: border-box;
+    
   }
+
+  .searchform__error {
+    margin-bottom: 21px;
+  }
+
   .searchform__input {
     font-size: 11px;
     width: 70%;

@@ -83,7 +83,10 @@
   padding: 0;
   margin: 0 auto 16px auto;
 }
-
+.profile__submit-send:disabled {
+  color: red;
+  cursor: default;
+}
 .profile__message {
   margin: 0;
   padding: 0; 

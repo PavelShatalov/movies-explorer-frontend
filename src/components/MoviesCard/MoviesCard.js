@@ -1,12 +1,18 @@
 import "./MoviesCard.css";
 import { useLocation } from "react-router-dom";
-import React, { useState } from "react"
-function MoviesCard({ card }) {
+import React, { useState, useEffect} from "react"
+function MoviesCard({ card, savedMovies, likeCard, deleteCard, setIsCardDeleted } ) {
   const { pathname } = useLocation();
 
+ 
   const [isLiked, setIsLiked] = useState(false);
-
-  function getTime(duration) {
+ 
+  React.useEffect(() => {
+    const isLiked = savedMovies.some((m) => m.movieId === card.id);
+    setIsLiked(isLiked);
+  }, [savedMovies, card.id]);
+  
+   function getTime(duration) {
     if (duration >= 60) {
       return `${Math.floor(duration / 60)}ч ${duration % 60}м`;
     }
@@ -15,18 +21,19 @@ function MoviesCard({ card }) {
 
   function handleLikeMovie(e) {
     e.preventDefault();
-    console.log('like');
+    isLiked ? handleDislikeMovie(e) : likeCard(card);
     setIsLiked(!isLiked);
   }
+  function handleDislikeMovie(e) {
+    let card3 = savedMovies.find((m) => m.movieId === card.id);
+    deleteCard(card3);
+  }
+
   function handleDeleteMovie(e) {
     e.preventDefault();
-    console.log('delete');
+    deleteCard(card);
   }
-  function handleSaveMovie(e) {
-    e.preventDefault();
-    console.log('save');
-  }
-  console.log(card.image.url);
+  
   return (
     <li className="card">
       <div className="card__container">
