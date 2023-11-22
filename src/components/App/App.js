@@ -33,7 +33,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [isOpenPopup, setIsOpenPopup] = useState(true);
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
 
