@@ -25,7 +25,7 @@ import {
 import Preloder from '../Preloader/Preloader.js';
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Popup from '../Popup/Popup.js';
-import { get } from 'mongoose';
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -157,6 +157,7 @@ function App() {
         handleSignIn({ email: data.email, password: data.password });
         setCurrentUser(res);
         setLoggedIn(true);
+        console.log("Вы зарегистрировались");
         if (loggedIn) {
           navigate("/movies", { replace: true });
         } else {
