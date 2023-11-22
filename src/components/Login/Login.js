@@ -5,7 +5,7 @@ import Preloder from '../Preloader/Preloader.js';
 
 import React, { useState, useEffect, useRef } from "react";
 
-function Login({ onSubmit, loginError }) {
+function Login({ onSubmit }) {
   useEffect(() => {
     setLoading(false);
   }, []);
@@ -23,44 +23,48 @@ function Login({ onSubmit, loginError }) {
     return re.test(email);
   }
   
-
   useEffect(() => {
-    setLoading(true);
-    validateEmailForm();
-    setLoading(false);
-  }, [email, emailInput,]); 
+    glopalValidate();
+  }, [email, password]);
 
-  useEffect(() => {
-    setLoading(true);
-   validatePasswordForm();
-    setLoading(false);
-  }, [password,passwordInput]); 
+
+  function glopalValidate() {
+    let isValid = validateEmailForm() && validatePasswordForm();
+    setIsValidForm(isValid);
+  }
 
   function validateEmailForm() {
     let isValid = true;
     let emailError = "";
-    if (emailInput.current && !emailInput.current.validity.valid) {
+
+    if (!email) {
+      // Если поле пусто, не показывать ошибку до тех пор, пока пользователь не начнет вводить
+      emailError = "";
+      isValid = false;
+    } else if (emailInput.current && !emailInput.current.validity.valid) {
       emailError = emailInput.current.validationMessage;
       isValid = false;
-    }
-    if(!validateEmail(email)){
+    } else if (!validateEmail(email)) {
       emailError = 'Введите корректный email';
       isValid = false;
     }
     setEmailError(emailError);
-    
-    setIsValidForm(isValid);
+    return isValid;
   }
+
   function validatePasswordForm() {
     let isValid = true;
     let passwordError = "";
-    if (passwordInput.current && !passwordInput.current.validity.valid) {
+    if (!password) {
+      // Если поле пусто, не показывать ошибку до тех пор, пока пользователь не начнет вводить
+      passwordError = "";
+      isValid = false;
+    } else if (passwordInput.current && !passwordInput.current.validity.valid) {
       passwordError = passwordInput.current.validationMessage;
       isValid = false;
     }
     setPasswordError(passwordError);
-   
-    setIsValidForm(isValid);
+    return isValid;
   }
 
   const handleLoginSubmit = (e) => {
@@ -95,7 +99,8 @@ function Login({ onSubmit, loginError }) {
                   <p className="login__description">E-mail</p>
                   <input type="email" id="sign-in-email-input" name="card-name" className={`login__input ${emailError && "login__input_active"}`}
                     minLength="2" maxLength="30" required onChange={handleEmailChange} value={'' || email} ref={emailInput} placeholder="email" />
-                  <p className="login__input-error login__input-error_active">{emailError}</p>
+                  <p className={`login__input-error ${emailError && "login__input-error_active"}`}>{emailError}</p>
+                  
                 </label>
                 <label className="login__label">
                   <p className="login__description">Пароль</p>

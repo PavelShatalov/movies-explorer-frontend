@@ -25,6 +25,7 @@ import {
 import Preloder from '../Preloader/Preloader.js';
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Popup from '../Popup/Popup.js';
+import { get } from 'mongoose';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -81,13 +82,16 @@ function App() {
     setLoading(true);
     getUserInfo().then((res) => {
       if (!res) {
-        
         throw new Error('Нет токена');
         return;
       }
       setLoggedIn(true);
       setCurrentUser(res);
-      navigate("/movies", { replace: true });
+      if (loggedIn) {
+        navigate("/movies", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
       return;
     })
       .catch((err) => {
@@ -99,16 +103,44 @@ function App() {
       });
   }
 
+
   const navigate = useNavigate();
 
   function handleSignIn(data) {
     setIsLoading(true);
     authorizace(data.password, data.email).then((res) => {
       if (res) {
-        navigate('/movies');
+        getUserInfo().then((res) => {
+          if (!res) {
+            throw new Error('Нет токена');
+            return;
+          }
+          setLoggedIn(true);
+          setCurrentUser(res);
+          if (loggedIn) {
+            navigate("/movies", { replace: true });
+          } else {
+            navigate("/", { replace: true });
+          }
+          return;
+        })
+          .catch((err) => {
+            console.log(err);
+            setIsOpenPopup(true);
+            setErrorMessage(err);
+          }).finally(() => {
+            setLoading(false);
+          });
+          if (loggedIn) {
+            navigate("/movies", { replace: true });
+          } else {
+            navigate("/", { replace: true });
+          }
         setLoggedIn(true);
+        console.log("Вы вошли в аккаунт");
       }
     }).catch((err) => {
+
       console.log(err);
       setIsOpenPopup(true);
       setErrorMessage(err);
@@ -122,9 +154,14 @@ function App() {
     setIsLoading(true);
     registrace(data.name, data.password, data.email).then((res) => {
       if (res) {
+        handleSignIn({ email: data.email, password: data.password });
+        setCurrentUser(res);
         setLoggedIn(true);
-        handleSignIn(data.email, data.password);
-        navigate('/movies');
+        if (loggedIn) {
+          navigate("/movies", { replace: true });
+        } else {
+          navigate("/", { replace: true });
+        }
       }
     }).catch((err) => {
       setIsOpenPopup(true);
@@ -140,7 +177,8 @@ function App() {
     setUserInfo({ name: data.name, email: data.email }).then((res) => {
       if (res) {
         setCurrentUser(res);
-        navigate('/movies');
+        setIsOpenPopup(true);
+      setErrorMessage('Данные успешно обновлены');
       }
     }).catch((err) => {
       console.log(err);
@@ -169,33 +207,30 @@ function App() {
   }
 
 
-  function likeCard(card) {
-    likeMovie(card)
-      .then((userMovie) => {
-        // setSavedMovies([userMovie, ...savedMovies]);
-        savedMovies.push(userMovie);
-        setSavedMovies(savedMovies.slice()); // обновляем состояние компонента
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsOpenPopup(true);
-        setErrorMessage(err);
-      });
 
+  async function likeCard(card) {
+    try {
+      const userMovie = await likeMovie(card);
+      savedMovies.push(userMovie);
+      setSavedMovies(savedMovies.slice());
+    } catch (err) {
+      console.error(err);
+      setIsOpenPopup(true);
+      setErrorMessage(err);
+    }
   }
 
-  function deleteCard(card) {
-    deleteMovie({ movieId: card._id })
-      .then(() => {
-        const newSavedMovies = savedMovies.filter((m) => m._id !== card._id);
-        setSavedMovies(newSavedMovies);
-        console.log("Карточка удалена");
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsOpenPopup(true);
-        setErrorMessage(err);
-      });
+  async function deleteCard(card) {
+    try {
+      await deleteMovie({ movieId: card._id });
+      const newSavedMovies = savedMovies.filter((m) => m._id !== card._id);
+      setSavedMovies(newSavedMovies);
+      console.log("Карточка удалена");
+    } catch (err) {
+      console.error(err);
+      setIsOpenPopup(true);
+      setErrorMessage(err);
+    }
   }
 
   function closePopup() {
@@ -211,13 +246,60 @@ function App() {
             <Header loggedIn={loggedIn} />
             <Routes>
               <Route path="/" exact element={<Main />} />
-              <Route path="/profile" exact element={<ProtectedRoute element={Profile} handleUserUpdate={(data) => handleUserUpdate(data)}
-                handleSignOut={handleSignOut} apiname={currentUser.name} apiemail={currentUser.email} loggedIn={loggedIn} ></ProtectedRoute>} />
-              <Route path="/movies" exact element={<ProtectedRoute element={Movies} loggedIn={loggedIn} movieList={movieList} savedMovies={savedMovies} likeCard={likeCard} deleteCard={deleteCard} ></ProtectedRoute>} />
-              <Route path="/saved-movies" exact element={<ProtectedRoute element={SavedMovies} loggedIn={loggedIn} movieList={movieList} savedMovies={savedMovies} likeCard={likeCard} deleteCard={deleteCard} ></ProtectedRoute>} />
+              <Route
+                path="/profile"
+                element={
+                  loggedIn ? (
+                    <ProtectedRoute
+                      element={Profile}
+                      handleUserUpdate={(data) => handleUserUpdate(data)}
+                      handleSignOut={handleSignOut}
+                      currentUser={currentUser}
+                      loggedIn={loggedIn}
+                    />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route
+                path="/movies"
+                element={
+                  loggedIn ? (
+                    <ProtectedRoute
+                      element={Movies}
+                      loggedIn={loggedIn}
+                      movieList={movieList}
+                      savedMovies={savedMovies}
+                      likeCard={likeCard}
+                      deleteCard={deleteCard}
+                    />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route
+                path="/saved-movies"
+                element={
+                  loggedIn ? (
+                    <ProtectedRoute
+                      element={SavedMovies}
+                      loggedIn={loggedIn}
+                      movieList={movieList}
+                      savedMovies={savedMovies}
+                      likeCard={likeCard}
+                      deleteCard={deleteCard}
+                    />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
               <Route path="/signin" exact element={<Login onSubmit={(data) => handleSignIn(data)} />} />
               <Route path="/signup" exact element={<Register onSubmit={(data) => handleSignUp(data)} />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="/404" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/404" />} />
             </Routes>
             <Footer />
             <Popup onClose={closePopup} isOpen={isOpenPopup} errorMessage={errorMessage}/> 

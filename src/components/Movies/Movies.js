@@ -27,6 +27,7 @@ function Movies({ movieList, likeCard, savedMovies, deleteCard}) {
       setLoading(false);
       return;
     };
+    setIsError(false);
     setChecked(true);
     const filteredMovies = movieList.filter((movie) => {
       const titleMatch = movie.nameRU.toLowerCase().includes(query.toLowerCase()) ||

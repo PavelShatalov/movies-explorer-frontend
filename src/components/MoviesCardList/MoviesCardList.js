@@ -72,8 +72,8 @@ function MoviesCardList({ movieList, likeCard, deleteCard, savedMovies }) {
             Показать еще
           </button>
         ) : (
-          <p className='movies__text'>Карточки закончились</p>
-        )}
+          movieList.length > 0 && <p className='movies__text'>Карточки закончились
+          </p> )}
       </div>
     ) :
     (

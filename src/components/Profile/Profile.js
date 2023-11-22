@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import Preloder from '../Preloader/Preloader.js';
 import React, { useState, useEffect, useRef } from "react";
 
-function Profile({ handleUserUpdate, handleSignOut, apiname, apiemail }) {
+function Profile({ handleUserUpdate, handleSignOut, currentUser}) {
   useEffect(() => {
     setLoading(false);
   }, []);
   const [loading, setLoading] = useState(true);
-  const [name, setName] = useState(apiname);
-  const [email, setEmail] = useState(apiemail);
+  const [name, setName] = useState(currentUser.name);
+  const [email, setEmail] = useState(currentUser.email);
   const [isValidForm, setIsValidForm] = useState(false);
 
   const emailInput = useRef(null);
@@ -22,16 +22,23 @@ function Profile({ handleUserUpdate, handleSignOut, apiname, apiemail }) {
 
   useEffect(() => {
     setLoading(true);
-    validateEmailForm();
+    globalValidate();
     setLoading(false);
-  }, [email, emailInput,]); 
+  }, [email, name,]); 
 
   useEffect(() => {
-    setLoading(true);
-    validateNameForm();
-    setLoading(false);
-  }, [name,nameInput]);
+    globalValidate();
+  }, [currentUser]);
 
+  function globalValidate() {
+    let isValid = true; 
+    if(email === currentUser.email && name === currentUser.name){
+      isValid = false;}
+    else {
+      isValid = validateEmailForm() && validateNameForm();
+    }
+    setIsValidForm(isValid);
+  }
   function validateEmailForm() {
     let isValid = true;
     if (emailInput.current && !emailInput.current.validity.valid) {
@@ -40,11 +47,8 @@ function Profile({ handleUserUpdate, handleSignOut, apiname, apiemail }) {
     if(!validateEmail(email)){
       isValid = false;
     }
-    if (email === apiemail) {
-     
-      isValid = false;
-    }
-    setIsValidForm(isValid);
+  
+    return isValid;
   }
 
   function validateNameForm() {
@@ -52,10 +56,8 @@ function Profile({ handleUserUpdate, handleSignOut, apiname, apiemail }) {
     if (nameInput.current && !nameInput.current.validity.valid) {
       isValid = false;
     }
-    if (name === apiname) {
-      isValid = false;
-    }
-    setIsValidForm(isValid);
+  
+   return isValid;
   }
 
   const handleLoginSubmit = (e) => {
@@ -79,7 +81,7 @@ function Profile({ handleUserUpdate, handleSignOut, apiname, apiemail }) {
         <>
           <section className="profile__container">
             <form className="profile__form" onSubmit={handleLoginSubmit}>
-              <h1 className="profile__title">Привет, {apiname}</h1>
+              <h1 className="profile__title">Привет, {currentUser.name}</h1>
               <fieldset className="profile__inputs">
                 <label className="profile__label profile__label_line">
                   <p className="profile__description">Имя</p>

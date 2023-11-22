@@ -1,6 +1,6 @@
 import "./SearchForm.css";
 // import { useNavigate, useLocation } from "react-router-dom";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 function SearchForm({ onSearch, shortFilm, setShortFilm, searchValue, error, isError}) {
 
   const [query, setQuery] = useState(searchValue || "");
@@ -13,7 +13,7 @@ function SearchForm({ onSearch, shortFilm, setShortFilm, searchValue, error, isE
     setShortFilm(!shortFilm);
     onSearch(query, !shortFilm);
   }
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     onSearch(query, shortFilm);

@@ -10,14 +10,10 @@ function SavedMovies({movieList, likeCard, savedMovies, deleteCard}) {
   const [loading, setLoading] = useState(true);
   const error = savedMovies.length > 0 ? "Нужно ввести ключевое слово" : "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз"
 
-  const localStorageFilmsCheckbox = localStorage.getItem('savedfilmsCheckbox') === 'true';
-  const localStorageFilmsInputSearch = localStorage.getItem('savedfilmsInputSearch');
-  const localStorageFilms = localStorage.getItem('savedfilms');
-
-  const [searchResults, setSearchResults] = useState(localStorageFilms ? JSON.parse(localStorageFilms) : []);
-  const [shortFilm, setShortFilm] = useState(localStorageFilmsCheckbox); // Стейт для чекбокса "Короткометражки"
+  const [searchResults, setSearchResults] = useState(savedMovies ? savedMovies : []);
+  const [shortFilm, setShortFilm] = useState(false); // Стейт для чекбокса "Короткометражки"
   const [isError, setIsError] = useState(false);
-  const [checked, setChecked] = useState(localStorageFilms ? true : false);
+  const [checked, setChecked] = useState(false);
 
 
   function handleSearch (query, shortFilm) {
@@ -57,7 +53,7 @@ function SavedMovies({movieList, likeCard, savedMovies, deleteCard}) {
           <Preloder />
         ) : (
           <>
-      <SearchForm onSearch={handleSearch} shortFilm={shortFilm} setShortFilm={setShortFilm} searchValue = {localStorageFilmsInputSearch} error = {error} isError = {isError} />
+      <SearchForm onSearch={handleSearch} shortFilm={shortFilm} setShortFilm={setShortFilm} error = {error} isError = {isError} />
       {checked && searchResults.length === 0 && <p className='movies__text'>Ничего не найдено</p>}
       <MoviesCardList movieList={searchResults} savedMovies = {savedMovies} likeCard = {likeCard} deleteCard = {handledeleteCard}/>
       </>

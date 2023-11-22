@@ -28,89 +28,67 @@ function Register({ onSubmit, loginError }) {
   }
 
   useEffect(() => {
-    setLoading(true);
-    validateEmailForm();
-    setLoading(false);
-  }, [email, emailInput,]); 
+    glopalValidate();
+  }, [email, password, name]);
 
-  useEffect(() => {
-    setLoading(true);
-   validatePasswordForm();
-    setLoading(false);
-  }, [password,passwordInput]); 
 
-  useEffect(() => {
-    setLoading(true);
-    validateNameForm();
-    setLoading(false);
-  }, [name,nameInput]);
+  function glopalValidate() {
+    let isValid = validateEmailForm() && validatePasswordForm() && validateNameForm();
+    setIsValidForm(isValid);
+  }
 
 
   function validateEmailForm() {
     let isValid = true;
     let emailError = "";
-    if (emailInput.current && !emailInput.current.validity.valid) {
+
+    if (!email) {
+      // Если поле пусто, не показывать ошибку до тех пор, пока пользователь не начнет вводить
+      emailError = "";
+      isValid = false;
+    } else if (emailInput.current && !emailInput.current.validity.valid) {
       emailError = emailInput.current.validationMessage;
       isValid = false;
-    }
-    if(!validateEmail(email)){
-
+    } else if (!validateEmail(email)) {
       emailError = 'Введите корректный email';
       isValid = false;
     }
     setEmailError(emailError);
-    setIsValidForm(isValid);
+    
+   return isValid;
   }
   function validatePasswordForm() {
     let isValid = true;
     let passwordError = "";
-    if (passwordInput.current && !passwordInput.current.validity.valid) {
+    if (!password) {
+      // Если поле пусто, не показывать ошибку до тех пор, пока пользователь не начнет вводить
+      passwordError = "";
+      isValid = false;
+    } else if (passwordInput.current && !passwordInput.current.validity.valid) {
       passwordError = passwordInput.current.validationMessage;
       isValid = false;
     }
     setPasswordError(passwordError);
-;
-    setIsValidForm(isValid);
+   
+    return isValid;
   }
 
   function validateNameForm() {
     let isValid = true;
     let nameError = "";
-    if (nameInput.current && !nameInput.current.validity.valid) {
+    if (!name) {
+      // Если поле пусто, не показывать ошибку до тех пор, пока пользователь не начнет вводить
+      nameError = "";
+      isValid = false;
+    } else if (nameInput.current && !nameInput.current.validity.valid) {
       nameError = nameInput.current.validationMessage;
       isValid = false;
     }
     setNameError(nameError);
 
-    setIsValidForm(isValid);
+    return isValid;
   }
 
-
-  // function validateForm() {
-  //   let isValid = true;
-  //   const newErrors = { email: "", password: "" };
-
-  //   // Use refs to access the input elements
-  //   if (!emailInput.current.validity.valid) {
-  //     newErrors.email = emailInput.current.validationMessage;
-  //     isValid = false;
-  //   }
-
-  //   if (!passwordInput.current.validity.valid) {
-  //     newErrors.password = passwordInput.current.validationMessage;
-  //     isValid = false;
-  //   }
-
-  //   if (!nameInput.current.validity.valid) {
-  //     newErrors.name = nameInput.current.validationMessage;
-  //     isValid = false;
-  //   }
-
-  //   setErrors(newErrors);
-  //   setIsValidForm(isValid);
-
-  //   return isValid;
-  // }
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();

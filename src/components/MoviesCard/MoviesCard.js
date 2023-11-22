@@ -22,7 +22,6 @@ function MoviesCard({ card, savedMovies, likeCard, deleteCard, setIsCardDeleted 
   function handleLikeMovie(e) {
     e.preventDefault();
     isLiked ? handleDislikeMovie(e) : likeCard(card);
-    setIsLiked(!isLiked);
   }
   function handleDislikeMovie(e) {
     let card3 = savedMovies.find((m) => m.movieId === card.id);
