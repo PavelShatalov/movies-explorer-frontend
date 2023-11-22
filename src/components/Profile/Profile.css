@@ -85,9 +85,9 @@
 
 }
 .profile__submit-send:disabled {
-  color: red;
+  color: #FFF;
   cursor: default;
-  opacity: 0.5;
+  opacity: 0.3;
   transition: none;
 }
 .profile__message {

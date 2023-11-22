@@ -117,12 +117,7 @@ function App() {
           }
           setLoggedIn(true);
           setCurrentUser(res);
-          if (loggedIn) {
             navigate("/movies", { replace: true });
-          } else {
-            navigate("/", { replace: true });
-          }
-          return;
         })
           .catch((err) => {
             console.log(err);
@@ -132,9 +127,9 @@ function App() {
             setLoading(false);
           });
           if (loggedIn) {
-            navigate("/movies", { replace: true });
+            navigate("/movies", { replace: true});
           } else {
-            navigate("/", { replace: true });
+            navigate("/", { replace: true});
           }
         setLoggedIn(true);
         console.log("Вы вошли в аккаунт");
@@ -152,25 +147,24 @@ function App() {
 
   function handleSignUp(data) {
     setIsLoading(true);
-    registrace(data.name, data.password, data.email).then((res) => {
-      if (res) {
-        handleSignIn({ email: data.email, password: data.password });
-        setCurrentUser(res);
-        setLoggedIn(true);
-        console.log("Вы зарегистрировались");
-        if (loggedIn) {
-          navigate("/movies", { replace: true });
-        } else {
-          navigate("/", { replace: true });
+    registrace(data.name, data.password, data.email)
+      .then((res) => {
+        if (res) {
+          handleSignIn({ email: data.email, password: data.password });
+          setCurrentUser(res);
+          setLoggedIn(true);
+          console.log("Вы зарегистрировались");
+          navigate("/movies"); // Изменено: переход на страницу фильмов после успешной регистрации
         }
-      }
-    }).catch((err) => {
-      setIsOpenPopup(true);
-      setErrorMessage(err);
-      console.log(err);
-    }).finally(() => {
-      setIsLoading(false);
-    });
+      })
+      .catch((err) => {
+        setIsOpenPopup(true);
+        setErrorMessage(err);
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   function handleUserUpdate(data) {
@@ -211,15 +205,19 @@ function App() {
 
   async function likeCard(card) {
     try {
+      if (!card || !card.id) {
+        throw new Error("Некорректные данные карточки для лайка");
+      }
       const userMovie = await likeMovie(card);
       savedMovies.push(userMovie);
       setSavedMovies(savedMovies.slice());
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error("Ошибка при лайке карточки:", error);
       setIsOpenPopup(true);
-      setErrorMessage(err);
+      setErrorMessage("Ошибка при добавлении фильма в избранное");
     }
   }
+
 
   async function deleteCard(card) {
     try {
@@ -230,7 +228,7 @@ function App() {
     } catch (err) {
       console.error(err);
       setIsOpenPopup(true);
-      setErrorMessage(err);
+      setErrorMessage("Ошибка при удалении фильма");
     }
   }
 

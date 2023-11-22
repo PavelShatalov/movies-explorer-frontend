@@ -18,12 +18,20 @@ function SavedMovies({movieList, likeCard, savedMovies, deleteCard}) {
 
   function handleSearch (query, shortFilm) {
     setLoading(true);
-    if (query === "") {
+    if (query === "" && shortFilm === false) {
       setIsError(true);
       setLoading(false)
       return;
-
-    };
+    }else if (query === "" && shortFilm === true) {
+      setIsError(false);
+      const filteredMovies = savedMovies.filter((movie) => {
+        const durationMatch = shortFilm ? movie.duration <= 40 : true;
+        return durationMatch;
+      });
+      setSearchResults(filteredMovies);
+      setLoading(false);
+      return;
+    }else {
     setChecked(true);
     const filteredMovies = savedMovies.filter((movie) => {
       const titleMatch = movie.nameRU.toLowerCase().includes(query.toLowerCase()) ||
@@ -32,19 +40,22 @@ function SavedMovies({movieList, likeCard, savedMovies, deleteCard}) {
       return titleMatch && durationMatch;
     });
     setSearchResults(filteredMovies);
-    localStorage.setItem('savedfilmsCheckbox', shortFilm);
-    localStorage.setItem('savedfilmsInputSearch', query);
-    localStorage.setItem('savedfilms', JSON.stringify(filteredMovies));
     setLoading(false);
   };
+}
+
+
 
   function handledeleteCard(card) {
-    setLoading(true);
+    deleteCard(card).then((res) => {
+      setLoading(true);
     const newSavedMovies = searchResults.filter((m) => m._id !== card._id);
     setSearchResults(newSavedMovies);
     localStorage.setItem('savedfilms', JSON.stringify(newSavedMovies));
-    deleteCard(card);
+    
     setLoading(false);
+    });
+    
   }
 
   return (
@@ -53,7 +64,7 @@ function SavedMovies({movieList, likeCard, savedMovies, deleteCard}) {
           <Preloder />
         ) : (
           <>
-      <SearchForm onSearch={handleSearch} shortFilm={shortFilm} setShortFilm={setShortFilm} error = {error} isError = {isError} />
+      <SearchForm onSearch={handleSearch}  shortFilm={shortFilm} setShortFilm={setShortFilm} error = {error} isError = {isError}  />
       {checked && searchResults.length === 0 && <p className='movies__text'>Ничего не найдено</p>}
       <MoviesCardList movieList={searchResults} savedMovies = {savedMovies} likeCard = {likeCard} deleteCard = {handledeleteCard}/>
       </>

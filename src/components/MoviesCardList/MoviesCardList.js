@@ -63,7 +63,7 @@ function MoviesCardList({ movieList, likeCard, deleteCard, savedMovies }) {
     (
       <div className='movies__container'>
         <ul className="movies">
-          {movieList.slice(0, visibleCards).map((card) => (
+          {movieList&&movieList.slice(0, visibleCards).map((card) => (
             <MoviesCard card={card} savedMovies={savedMovies} likeCard={likeCard} deleteCard={deleteCard} key={card.id} />
           ))}
         </ul>
@@ -79,7 +79,7 @@ function MoviesCardList({ movieList, likeCard, deleteCard, savedMovies }) {
     (
       <div className='movies__container'>
         <ul className="movies">
-          {movieList.map((card) => (
+          { movieList&&movieList.map((card) => (
             <MoviesCard card={card} savedMovies={savedMovies} likeCard={likeCard} deleteCard={deleteCard} key={card.id} />
           ))}
         </ul>
