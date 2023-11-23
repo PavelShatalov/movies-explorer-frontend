@@ -11,68 +11,342 @@ import NotFound from '../NotFound/NotFound.js';
 import Movies from '../Movies/Movies.js';
 import SavedMovies from '../SavedMovies/SavedMovies.js';
 import { getMovies } from "../../utils/MovieApi.js";
-
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import {
+  registrace,
+  authorizace,
+  getUserInfo,
+  setUserInfo,
+  getSavedMovies,
+  likeMovie,
+  deleteMovie,
+  jwtDelete
+} from "../../utils/MainApi";
 import Preloder from '../Preloader/Preloader.js';
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import Popup from '../Popup/Popup.js';
+
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [movieList, setMovieList] = useState([]);
+  const [savedMovies, setSavedMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+
+  useEffect(() => {
+    checkJWT();
+  }, [])
 
   useEffect(() => {
     async function fetchMovies() {
+      setLoading(true);
       try {
         const movies = await getMovies();
         setMovieList(movies);
       } catch (error) {
         console.error(error);
+        setIsOpenPopup(true);
+        setErrorMessage(error);
       } finally {
         setLoading(false);
       }
     }
-
     fetchMovies();
   }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    if (loggedIn) {
+      getSavedMovies().then((res) => {
+        if (res) {
+          setSavedMovies(res);
+        }
+      }).catch((err) => {
+        console.log(err);
+        setIsOpenPopup(true);
+        setErrorMessage(err);
+      });
+    }
+    setLoading(false);
+  }
+    , [loggedIn]);
+
+
+
+  function checkJWT() {
+    setLoading(true);
+    getUserInfo().then((res) => {
+      if (!res) {
+        throw new Error('Нет токена');
+        return;
+      }
+      setLoggedIn(true);
+      setCurrentUser(res);
+      if (loggedIn) {
+        navigate("/movies", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+      return;
+    })
+      .catch((err) => {
+        console.log(err);
+        setIsOpenPopup(true);
+        setErrorMessage(err);
+      }).finally(() => {
+        setLoading(false);
+      });
+  }
+
 
   const navigate = useNavigate();
 
   function handleSignIn(data) {
-    console.log(data);
+    setIsLoading(true);
+    authorizace(data.password, data.email).then((res) => {
+      if (res) {
+        getUserInfo().then((res) => {
+          if (!res) {
+            throw new Error('Нет токена');
+            return;
+          }
+          setLoggedIn(true);
+          setCurrentUser(res);
+            navigate("/movies", { replace: true });
+        })
+          .catch((err) => {
+            console.log(err);
+            setIsOpenPopup(true);
+            setErrorMessage(err);
+          }).finally(() => {
+            setLoading(false);
+          });
+          if (loggedIn) {
+            navigate("/movies", { replace: true});
+          } else {
+            navigate("/", { replace: true});
+          }
+        setLoggedIn(true);
+        console.log("Вы вошли в аккаунт");
+      }
+    }).catch((err) => {
+
+      console.log(err);
+      setIsOpenPopup(true);
+      setErrorMessage(err);
+      
+    }).finally(() => {
+      setIsLoading(false);
+    });
   }
 
   function handleSignUp(data) {
-    console.log(data);
+    setIsLoading(true);
+    registrace(data.name, data.password, data.email)
+      .then((res) => {
+        if (res) {
+          handleSignIn({ email: data.email, password: data.password });
+          setCurrentUser(res);
+          setLoggedIn(true);
+          console.log("Вы зарегистрировались");
+          navigate("/movies"); // Изменено: переход на страницу фильмов после успешной регистрации
+        }
+      })
+      .catch((err) => {
+        setIsOpenPopup(true);
+        setErrorMessage(err);
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   function handleUserUpdate(data) {
-    console.log(data);
+    setIsLoading(true);
+    setUserInfo({ name: data.name, email: data.email }).then((res) => {
+      if (res) {
+        setCurrentUser(res);
+        setIsOpenPopup(true);
+      setErrorMessage('Данные успешно обновлены');
+      }
+    }).catch((err) => {
+      console.log(err);
+      setIsOpenPopup(true);
+      setErrorMessage(err);
+    }).finally(() => {
+      setIsLoading(false);
+    });
   }
 
   function handleSignOut() {
-    console.log('sign out');
-    navigate('/');
+    jwtDelete().then((res) => {
+      if (res) {
+        localStorage.clear();
+        setLoggedIn(false);
+        navigate("/", { replace: true });
+        setCurrentUser({});
+        console.log("Вы вышли из аккаунта");
+      }
+    }
+    ).catch((err) => {
+      console.log(err);
+      setIsOpenPopup(true);
+      setErrorMessage(err);
+    });
   }
 
+
+
+  async function likeCard(card) {
+    try {
+      if (!card || !card.id) {
+        throw new Error("Некорректные данные карточки для лайка");
+      }
+      const userMovie = await likeMovie(card);
+      savedMovies.push(userMovie);
+      setSavedMovies(savedMovies.slice());
+    } catch (error) {
+      console.error("Ошибка при лайке карточки:", error);
+      setIsOpenPopup(true);
+      setErrorMessage("Ошибка при добавлении фильма в избранное");
+    }
+  }
+
+
+  // async function deleteCard(card) {
+  //   try {
+  //     console.log(card);
+  //     if (!card || !card._id) {
+  //       console.log("dd");
+  //       throw new Error("Некорректные данные карточки для удаления");
+  //     }
+  //     await deleteMovie({ movieId: card._id }).then((res) => {
+  //       if (res) {
+  //         const newSavedMovies = savedMovies.filter((m) => m._id !== card._id);
+  //     setSavedMovies(newSavedMovies);
+  //     console.log("Карточка удалена");
+  //         console.log("Карточка удалена");
+  //       }
+  //     }).catch((err) => {
+  //       console.error("Ошибка при лайке карточки:", err);
+  //       setIsOpenPopup(true);
+  //       setErrorMessage(err);
+  //     });
+      
+  //   }catch (err) {
+  //     console.error(err);
+  //     setIsOpenPopup(true);
+  //     setErrorMessage("Ошибка при удалении фильма");
+  //   }
+  // }
+
+  async function deleteCard(card) {
+    try {
+      if (!card || !card._id) {
+        throw new Error("Некорректные данные карточки для удаления");
+      }
+  
+      const response = await deleteMovie({ movieId: card._id });
+      console.log("Карточка удалена2", response);
+      console.log(response);
+      if (response) {
+        const newSavedMovies = savedMovies.filter((m) => m._id !== card._id);
+        setSavedMovies(newSavedMovies);
+        console.log("Карточка удалена");
+      } else {
+        console.log("Карточка не удалена - отсутствует ответ от сервера");
+      }
+      return 1;
+    } catch (error) {
+      console.error("Ошибка при удалении карточки:", error);
+      setIsOpenPopup(true);
+      setErrorMessage("Ошибка при удалении фильма");
+      return 0;
+    }
+  }
+
+  function closePopup() {
+    setIsOpenPopup(false);
+  }
   return (
-    <div className="App">
-      {loading ? (
-        <Preloder />
-      ) : (
-        <>
-          <Header loggedIn={loggedIn} />
-          <Routes>
-            <Route path="/" exact element={<Main />} />
-            <Route path="/signin" exact element={<Login onSubmit={(data) => handleSignIn(data)} />} />
-            <Route path="/signup" exact element={<Register onSubmit={(data) => handleSignUp(data)} />} />
-            <Route path="/profile" exact element={<Profile handleUserUpdate={(data) => handleUserUpdate(data)} handleSignOut={handleSignOut} apiname="pavel" apiemail="mail@mail" />} />
-            <Route path="/movies" exact element={<Movies movies={movieList} />} />
-            <Route path="/saved-movies" exact element={<SavedMovies movies={movieList} />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Footer />
-        </>
-      )}
-    </div>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="App">
+        {loading ? (
+          <Preloder />
+        ) : (
+          <>
+            <Header loggedIn={loggedIn} />
+            <Routes>
+              <Route path="/" exact element={<Main />} />
+              <Route
+                path="/profile"
+                element={
+                  loggedIn ? (
+                    <ProtectedRoute
+                      element={Profile}
+                      handleUserUpdate={(data) => handleUserUpdate(data)}
+                      handleSignOut={handleSignOut}
+                      currentUser={currentUser}
+                      loggedIn={loggedIn}
+                    />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route
+                path="/movies"
+                element={
+                  loggedIn ? (
+                    <ProtectedRoute
+                      element={Movies}
+                      loggedIn={loggedIn}
+                      movieList={movieList}
+                      savedMovies={savedMovies}
+                      likeCard={likeCard}
+                      deleteCard={deleteCard}
+                    />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route
+                path="/saved-movies"
+                element={
+                  loggedIn ? (
+                    <ProtectedRoute
+                      element={SavedMovies}
+                      loggedIn={loggedIn}
+                      movieList={movieList}
+                      savedMovies={savedMovies}
+                      likeCard={likeCard}
+                      deleteCard={deleteCard}
+                    />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route path="/signin" exact element={<Login onSubmit={(data) => handleSignIn(data)} />} />
+              <Route path="/signup" exact element={<Register onSubmit={(data) => handleSignUp(data)} />} />
+              <Route path="/404" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/404" />} />
+            </Routes>
+            <Footer />
+            <Popup onClose={closePopup} isOpen={isOpenPopup} errorMessage={errorMessage}/> 
+          </>
+        )}
+      </div>
+      
+    </CurrentUserContext.Provider>
+    
   );
 }
 

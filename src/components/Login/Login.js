@@ -1,49 +1,77 @@
 import "./Login.css";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.svg";
+import Preloder from '../Preloader/Preloader.js';
 
 import React, { useState, useEffect, useRef } from "react";
 
 function Login({ onSubmit }) {
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+  const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ email: "", password: "" });
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [isValidForm, setIsValidForm] = useState(false);
 
   const emailInput = useRef(null);
   const passwordInput = useRef(null);
-
+  function validateEmail(email) {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+  
   useEffect(() => {
-    validateForm();
+    glopalValidate();
   }, [email, password]);
 
-  function validateForm() {
-    let isValid = true;
-    const newErrors = { email: "", password: "" };
 
-    // Use refs to access the input elements
-    if (!emailInput.current.validity.valid) {
-      newErrors.email = emailInput.current.validationMessage;
-      isValid = false;
-    }
-
-    if (!passwordInput.current.validity.valid) {
-      newErrors.password = passwordInput.current.validationMessage;
-      isValid = false;
-    }
-
-    setErrors(newErrors);
+  function glopalValidate() {
+    let isValid = validateEmailForm() && validatePasswordForm();
     setIsValidForm(isValid);
+  }
 
+  function validateEmailForm() {
+    let isValid = true;
+    let emailError = "";
+
+    if (!email) {
+      // Если поле пусто, не показывать ошибку до тех пор, пока пользователь не начнет вводить
+      emailError = "";
+      isValid = false;
+    } else if (emailInput.current && !emailInput.current.validity.valid) {
+      emailError = emailInput.current.validationMessage;
+      isValid = false;
+    } else if (!validateEmail(email)) {
+      emailError = 'Введите корректный email';
+      isValid = false;
+    }
+    setEmailError(emailError);
+    return isValid;
+  }
+
+  function validatePasswordForm() {
+    let isValid = true;
+    let passwordError = "";
+    if (!password) {
+      // Если поле пусто, не показывать ошибку до тех пор, пока пользователь не начнет вводить
+      passwordError = "";
+      isValid = false;
+    } else if (passwordInput.current && !passwordInput.current.validity.valid) {
+      passwordError = passwordInput.current.validationMessage;
+      isValid = false;
+    }
+    setPasswordError(passwordError);
     return isValid;
   }
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-
-    if (validateForm()) {
-      onSubmit({ password, email });
-    }
+    setLoading(true);
+    onSubmit({ password, email });
+    setLoading(false);
   };
 
   const handleEmailChange = (e) => {
@@ -56,34 +84,41 @@ function Login({ onSubmit }) {
 
   return (
     <main className="login">
-      <section className="login__container">
-        <Link className="login__logoContainer" to="/">
-          <img className="login__logo link" src={logo} alt="Логотип дипломного проекта" />
-        </Link>
-        <form className="login__form" onSubmit ={handleLoginSubmit}>
-          <h1 className="login__title">Рады видеть!</h1>
-          <fieldset className="login__inputs">
-            <label className="login__label">
-              <p className="login__description">E-mail</p>
-              <input type="email" id="sign-in-email-input" name="card-name" className={`login__input ${errors.email && "login__input_active"}`}
-                minLength="2" maxLength="30" required onChange={handleEmailChange} value={'' || email} ref={emailInput} placeholder = "email" />
-              <p className="login__input-error login__input-error_active">{errors.email}</p>
-            </label>
-            <label className="login__label">
-              <p className="login__description">Пароль</p>
-              <input type="password" id="sign-in-password-input" name="url" className={`login__input ${errors.password && "login__input_active"}`}
-              minLength="2" maxLength="30" required onChange={handlePasswordChange} value={'' || password} ref={passwordInput} placeholder = "password" />
-              <p className={`login__input-error ${errors.password && "login__input-error_active"}`} >{errors.password}</p>
-            </label>
-            <button type="submit" className="login__submit-send link" disabled={!isValidForm}>Войти</button>
-            <p className="login__message">
-            <span className="login__ask">Ещё не зарегистрированы?</span>
-            <Link to="/signup" className="login__link link">Регистрация</Link>
-            {/* <span className="login__link link">Регистрация</span> */}
-            </p>
-          </fieldset>
-        </form>
-      </section>
+      {loading ? (
+        <Preloder />
+      ) : (
+        <>
+          <section className="login__container">
+            <Link className="login__logoContainer" to="/">
+              <img className="login__logo link" src={logo} alt="Логотип дипломного проекта" />
+            </Link>
+            <form className="login__form" onSubmit={handleLoginSubmit}>
+              <h1 className="login__title">Рады видеть!</h1>
+              <fieldset className="login__inputs">
+                <label className="login__label">
+                  <p className="login__description">E-mail</p>
+                  <input type="email" id="sign-in-email-input" name="card-name" className={`login__input ${emailError && "login__input_active"}`}
+                    minLength="2" maxLength="30" required onChange={handleEmailChange} value={'' || email} ref={emailInput} placeholder="email" />
+                  <p className={`login__input-error ${emailError && "login__input-error_active"}`}>{emailError}</p>
+                  
+                </label>
+                <label className="login__label">
+                  <p className="login__description">Пароль</p>
+                  <input type="password" id="sign-in-password-input" name="url" className={`login__input ${passwordError && "login__input_active"}`}
+                    minLength="2" maxLength="30" required onChange={handlePasswordChange} value={'' || password} ref={passwordInput} placeholder="password" />
+                  <p className={`login__input-error ${passwordError && "login__input-error_active"}`} >{passwordError}</p>
+                </label>
+
+                <button type="submit" className="login__submit-send link" disabled={!isValidForm}>Войти</button>
+                <p className="login__message">
+                  <span className="login__ask">Ещё не зарегистрированы?</span>
+                  <Link to="/signup" className="login__link link">Регистрация</Link>
+                </p>
+              </fieldset>
+            </form>
+          </section>
+        </>
+      )}
     </main>
   )
 }

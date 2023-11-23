@@ -112,7 +112,11 @@
   margin: 0 0 16px 0;
   cursor: pointer;
 }
-
+.login__submit-send:disabled {
+  background: #4285F4;
+  opacity: 0.5;
+  cursor: default;
+}
 .login__message {
   margin: 0;
   padding: 0; 

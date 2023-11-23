@@ -11,7 +11,6 @@ function Header({ loggedIn }) {
   const { pathname } = useLocation();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const popup = useRef(null);
-  loggedIn = false;
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
