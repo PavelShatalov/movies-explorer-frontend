@@ -46,16 +46,35 @@ function SavedMovies({movieList, likeCard, savedMovies, deleteCard}) {
 
 
 
-  function handledeleteCard(card) {
-    deleteCard(card).then((res) => {
+  // function handledeleteCard(card) {
+  //   deleteCard(card).then((res) => {
+  //     setLoading(true);
+  //   const newSavedMovies = searchResults.filter((m) => m._id !== card._id);
+  //   setSearchResults(newSavedMovies); 
+  //   setLoading(false);
+  //   console.log("Карточка удалена222", res);
+  //   });
+    
+  // }
+  async function handledeleteCard(card) {
+    try {
       setLoading(true);
-    const newSavedMovies = searchResults.filter((m) => m._id !== card._id);
-    setSearchResults(newSavedMovies);
-    localStorage.setItem('savedfilms', JSON.stringify(newSavedMovies));
-    
-    setLoading(false);
-    });
-    
+  
+      const res = await deleteCard(card);
+     
+      if (res!==1) {
+        throw new Error("Ошибка при удалении карточки");
+      }
+      console.log("Карточка удалена", res);
+      const newSavedMovies = searchResults.filter((m) => m._id !== card._id);
+
+      setSearchResults(newSavedMovies);
+      console.log("Карточка удалена222", res);
+    } catch (error) {
+      console.error("Ошибка при удалении карточки:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

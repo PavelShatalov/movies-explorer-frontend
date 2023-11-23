@@ -219,16 +219,55 @@ function App() {
   }
 
 
+  // async function deleteCard(card) {
+  //   try {
+  //     console.log(card);
+  //     if (!card || !card._id) {
+  //       console.log("dd");
+  //       throw new Error("Некорректные данные карточки для удаления");
+  //     }
+  //     await deleteMovie({ movieId: card._id }).then((res) => {
+  //       if (res) {
+  //         const newSavedMovies = savedMovies.filter((m) => m._id !== card._id);
+  //     setSavedMovies(newSavedMovies);
+  //     console.log("Карточка удалена");
+  //         console.log("Карточка удалена");
+  //       }
+  //     }).catch((err) => {
+  //       console.error("Ошибка при лайке карточки:", err);
+  //       setIsOpenPopup(true);
+  //       setErrorMessage(err);
+  //     });
+      
+  //   }catch (err) {
+  //     console.error(err);
+  //     setIsOpenPopup(true);
+  //     setErrorMessage("Ошибка при удалении фильма");
+  //   }
+  // }
+
   async function deleteCard(card) {
     try {
-      await deleteMovie({ movieId: card._id });
-      const newSavedMovies = savedMovies.filter((m) => m._id !== card._id);
-      setSavedMovies(newSavedMovies);
-      console.log("Карточка удалена");
-    } catch (err) {
-      console.error(err);
+      if (!card || !card._id) {
+        throw new Error("Некорректные данные карточки для удаления");
+      }
+  
+      const response = await deleteMovie({ movieId: card._id });
+      console.log("Карточка удалена2", response);
+      console.log(response);
+      if (response) {
+        const newSavedMovies = savedMovies.filter((m) => m._id !== card._id);
+        setSavedMovies(newSavedMovies);
+        console.log("Карточка удалена");
+      } else {
+        console.log("Карточка не удалена - отсутствует ответ от сервера");
+      }
+      return 1;
+    } catch (error) {
+      console.error("Ошибка при удалении карточки:", error);
       setIsOpenPopup(true);
       setErrorMessage("Ошибка при удалении фильма");
+      return 0;
     }
   }
 
